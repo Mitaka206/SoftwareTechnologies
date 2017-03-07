@@ -1,0 +1,20 @@
+
+form{
+    display: inline-block;
+    background: #eee;
+}
+
+form input, form select{
+    width: 150px;
+    height: 20px;
+    margin: 0px 5px;
+    box-sizing: border-box;
+}
+
+form input[type="submit"]{
+    display: block;
+    text-align: center;
+    margin: 10px 0px 12px 98px;
+    width: 80px;
+    height: 30px;
+}
