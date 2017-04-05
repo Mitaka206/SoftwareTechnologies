@@ -1,0 +1,28 @@
+﻿@model myMag.Models.Ad
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="container">
+    <h2>Details</h2>
+    <div class="row">
+        <h3>
+            @Model.TitleAd
+        </h3>
+        <p>
+            @Model.CategotyAd
+        </p>
+        <p>
+            @Model.DescriptionAd
+        </p>
+        <footer>
+            @Html.ActionLink("Edit", "Edit", "Ad", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+            @Html.ActionLink("Delete", "Delete", "Ad", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            @Html.ActionLink("Back", "Index", "Ad", null, new { @class = "btn btn-default btn-xs" })
+
+            <small>Seller - @Model.Seller.FullName</small>
+        </footer>
+        }
+    </div>
+    </div>
+

@@ -1,0 +1,42 @@
+﻿@model myMag.Models.Ad
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="container">
+        <h2>Create Ad</h2>
+        @using (Html.BeginForm("Create", "Ad", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.TitleAd, new { @class = "control-label col-sm-4" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.TitleAd, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.CategotyAd, new { @class = "control-label col-sm-4" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.CategotyAd, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.DescriptionAd, new { @class = "control-label col-sm-4" })
+                <div class="col-sm-4">
+                    @Html.TextAreaFor(m => m.DescriptionAd, new { @class = "form-control", @rows = "7" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-4">
+                    @Html.ActionLink("Cancel", "Index", "Ad", null, new { @class = "btn btn-default" })
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
