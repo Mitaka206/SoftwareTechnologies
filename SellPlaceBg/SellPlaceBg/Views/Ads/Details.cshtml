@@ -1,0 +1,80 @@
+﻿@model SellPlaceBg.Models.Ads.DetailsAdModel
+@{
+    ViewBag.Title = "Details";
+}
+
+@if (Model.IsSold)
+{
+    <h2 class="text-center text-warning">
+         This product is Sold!!!
+    </h2>
+}
+
+
+<h2>Details</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="@Model.ImgUrl" class="img-responsive" />
+            <div class="text-center detail-price">
+                @Model.Price BGN
+            </div>
+            <div class="col-sm-4">
+                @if (Model.ContactInformation != User.Identity.Name)
+                {
+                    using (Html.BeginForm("Cart", "Ads", FormMethod.Get))
+                    {
+                        @Html.Hidden("AdId", Model.Id)
+                        <input class="btn btn-success @(Model.IsSold ? "disabled" : string.Empty)" type="submit" value="Add to cart" />
+                    }
+                }
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+            <h2>@Model.Title
+            in @Model.Town</h2>
+            <div class="info-ad" style="text-align: right">
+                <h6>
+                    Category:
+                    <i>
+                        @Model.Category
+                    | </i>
+                    Added on: 
+                    <i>
+                        @Model.Date.Day
+                        - @Model.Date.Month
+                        - @Model.Date.Year
+                    </i>
+                </h6>
+            </div>
+            <hr />
+            <div class="discription bt">
+                @Html.Raw(@Model.Discription)
+            </div >
+            
+        </div>
+        <div class="col-sm-2">
+            @Html.ActionLink("Edit", "Edit", "Ads", new { @id = Model.Id }, new { @class = "btn btn-default btn-sm pull-right", @style = "margin: 5px" })
+            @Html.ActionLink("Delete", "Delete", "Ads", new { @id = Model.Id }, new { @class = "btn btn-danger btn-sm pull-right", @style = "margin: 5px" })
+        </div>
+    </div>
+    <hr />
+
+    <br />
+    <div class="row contact-info text-center">
+        <div class="col-sm-4">
+            <a class="" href="/Ads/AllAds?user=@Model.ContactInformation">All ads by this user</a>
+        </div>
+        <div class="col-sm-4">
+            Contact:
+            <a href = "mailto:@Model.ContactInformation" > @Model.ContactInformation </a >
+        </div>
+        <div class="col-sm-4">
+            @Html.ActionLink("Go to homepage", "Index", "Home")
+        </div>
+    </div>
+</div>

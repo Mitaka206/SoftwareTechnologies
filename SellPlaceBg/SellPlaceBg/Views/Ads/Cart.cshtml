@@ -1,0 +1,26 @@
+﻿@model SellPlaceBg.Models.CartModel
+@{
+    ViewBag.Title = "Cart";
+}
+
+<h2>Cart</h2>
+
+<div class="container">
+    <h3>
+        Are you sure you want buy @Model.Title
+    </h3>
+    <br />
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="@Model.ImgUrl" class="img-responsive" />
+        </div>
+        <br />
+        <div class="col-sm-6">
+            For @Model.TotalPrice BGN (Price with tax 20%)
+        </div>
+        <div class="col-sm-2">
+            @*<input type="submit" class="btn btn-sucsess " />*@
+        </div>
+    </div>
+</div>
+

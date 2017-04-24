@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SellPlaceBg.Models.Ads.AllAdModel>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron" style="margin-top: 20px">
+    <h2 class="text-center">
+        Sell place BG
+    </h2>
+</div>
+
+
+<div class="container">
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-4">
+                <h2>
+                    <a href="~/Ads/Details/@item.Id">
+                        @item.Title
+                    </a>
+                </h2>
+                <div class="info-ad" style="text-align: right">
+                    <h6>
+                        Category:
+                        <i>
+                            <strong>
+                                @item.Category
+                            </strong>
+                        </i>
+                    </h6>
+                </div>
+                <div>
+                    @item.Price BGN
+                </div>
+                <div>
+                    <a href="~/Ads/Details/@item.Id">
+                        <img src="@item.ImgUrl" class="img-responsive" style="height: 150px" />
+                    </a>
+                    <p>
+                        <br />
+                        <a class="btn btn-info" href="~/Ads/Details/@item.Id">See more</a>
+                    </p>
+                </div>
+                <hr />
+            </div>
+
+        }
+    </div>
+
+</div>

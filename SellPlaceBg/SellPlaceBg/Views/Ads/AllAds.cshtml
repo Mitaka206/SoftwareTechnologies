@@ -1,0 +1,66 @@
+﻿@model IEnumerable<SellPlaceBg.Models.Ads.AllAdModel>
+
+
+@{
+    ViewBag.Title = "AllAds";
+}
+
+<h2 class="text-center">
+    Page - No @ViewBag.CurrentPage
+</h2>
+
+<div class="container">
+    <div class="row">
+
+        @if (!Model.Any())
+        {
+            <h2 class="text-center">
+                No Ads!
+            </h2>
+        }
+        
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-4">
+                <h2>
+                    <a href="~/Ads/Details/@item.Id">
+                        @item.Title
+                    </a>
+                </h2>
+                <div class="info-ad" style="text-align: right">
+                    <h6>
+                        Category:
+                        <i>
+                            <strong>
+                                @item.Category
+                            </strong>
+                        </i>
+                    </h6>
+                </div>
+                <div>
+                    @item.Price BGN
+                </div>
+                <div>
+                    <a href="~/Ads/Details/@item.Id">
+                        <img src="@item.ImgUrl" class="img-responsive" @(item.IsSold ? "style='opacity: 0.5'" : string.Empty)/>
+                    </a>
+                    <p>
+                        <br />
+                        <a class="btn @(item.IsSold ? "btn-default" : "btn-primary") pull-right" href="~/Ads/Details/@item.Id">@(item.IsSold ? "Thist product is sold" : "See more")</a>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@{ 
+    var currentUserQuery = Request.QueryString["user"];
+}
+
+<p class="text-center" style="margin-bottom: 70px; margin-top: 20px">
+    <a href="~/Ads/AllAds?page=@(ViewBag.CurrentPage - 1)@(currentUserQuery != null ? "&user" + currentUserQuery : string.Empty)" class="btn btn-primary pull-left @(ViewBag.CurrentPage == 1 ? "disabled" : string.Empty)"><< Prev</a>
+    <a href="~/Ads/AllAds?page=@(ViewBag.CurrentPage + 1)@(currentUserQuery != null ? "&user" + currentUserQuery : string.Empty)" class="btn btn-primary pull-right @(!Model.Any() || Model.Count() < 3 ? "disabled" : string.Empty)">Next >></a>
+    
+
+</p>
