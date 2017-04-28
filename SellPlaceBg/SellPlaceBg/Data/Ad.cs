@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SellPlaceBg.Infrastructure;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace SellPlaceBg.Data
 {
@@ -31,7 +29,9 @@ namespace SellPlaceBg.Data
         public Town Town { get; set; }
 
         [Required]
-        public string ImgUrl { get; set; }
+        [ImageValidateAtribut]
+        [Url]
+        public string ImgURL { get; set; }
 
         public bool IsSold { get; set; }
 

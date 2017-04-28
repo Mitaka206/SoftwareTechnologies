@@ -5,9 +5,16 @@
     ViewBag.Title = "AllAds";
 }
 
+
 <h2 class="text-center">
     Page - No @ViewBag.CurrentPage
+    @using (Html.BeginForm("AllAds", "Ads", FormMethod.Get))
+    {
+            <input type="text" class="form-control" name="Search" style="display: inline-block; margin-right: 10px" value="@Request.QueryString["search"]" />
+            <input type="submit" class="btn btn-primary" style="margin-top: 6px" value="Search" />
+    }
 </h2>
+
 
 <div class="container">
     <div class="row">
@@ -27,7 +34,7 @@
                         @item.Title
                     </a>
                 </h2>
-                <div class="info-ad" style="text-align: right">
+                <div class="text-center info-ad">
                     <h6>
                         Category:
                         <i>
@@ -42,11 +49,11 @@
                 </div>
                 <div>
                     <a href="~/Ads/Details/@item.Id">
-                        <img src="@item.ImgUrl" class="img-responsive" @(item.IsSold ? "style='opacity: 0.5'" : string.Empty)/>
+                        <img src="@item.ImgUrl" class="img-responsive img-rounded" @(item.IsSold ? "style='opacity: 0.5'" : string.Empty) />
                     </a>
                     <p>
                         <br />
-                        <a class="btn @(item.IsSold ? "btn-default" : "btn-primary") pull-right" href="~/Ads/Details/@item.Id">@(item.IsSold ? "Thist product is sold" : "See more")</a>
+                        <a class="btn @(item.IsSold ? "btn-default" : "") pull-right" href="~/Ads/Details/@item.Id">@(item.IsSold ? "Thist product is sold" : string.Empty)</a>
                     </p>
                 </div>
             </div>
@@ -55,12 +62,16 @@
 </div>
 
 @{ 
-    var currentUserQuery = Request.QueryString["user"];
+    var currentUser = Request.QueryString["user"];
+    var currentSearch = Request.QueryString["search"];
+
+    var currentUserQuery = currentUser != null ? "&user" + currentUser : string.Empty;
+    var currentSearchQuery = currentSearch != null ? "&search" + currentSearch : string.Empty;
 }
 
 <p class="text-center" style="margin-bottom: 70px; margin-top: 20px">
-    <a href="~/Ads/AllAds?page=@(ViewBag.CurrentPage - 1)@(currentUserQuery != null ? "&user" + currentUserQuery : string.Empty)" class="btn btn-primary pull-left @(ViewBag.CurrentPage == 1 ? "disabled" : string.Empty)"><< Prev</a>
-    <a href="~/Ads/AllAds?page=@(ViewBag.CurrentPage + 1)@(currentUserQuery != null ? "&user" + currentUserQuery : string.Empty)" class="btn btn-primary pull-right @(!Model.Any() || Model.Count() < 3 ? "disabled" : string.Empty)">Next >></a>
+    <a href="~/Ads/AllAds?page=@(ViewBag.CurrentPage - 1)@currentUserQuery@currentSearchQuery" class="btn btn-primary pull-left @(ViewBag.CurrentPage == 1 ? "disabled" : string.Empty)"><< Prev</a>
+    <a href="~/Ads/AllAds?page=@(ViewBag.CurrentPage + 1)@currentUserQuery@currentSearchQuery" class="btn btn-primary pull-right @(!Model.Any() || Model.Count() < 3 ? "disabled" : string.Empty)">Next >></a>
     
 
 </p>

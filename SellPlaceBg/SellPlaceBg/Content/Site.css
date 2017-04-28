@@ -28,10 +28,20 @@ textarea {
 }
 
 .info-ad {
-    text-align: right;
+    opacity: 0.7;
 }
 
 .detail-price {
+    margin-left: 50px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     font-weight: bolder;
-    margin-top: 50px;
+}
+
+.detail-btn {
+    margin-left: 33px;
+}
+
+.backgrund-is{
+    background-color: azure;
 }

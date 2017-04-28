@@ -3,24 +3,33 @@
     ViewBag.Title = "Cart";
 }
 
-<h2>Cart</h2>
-
 <div class="container">
     <h3>
         Are you sure you want buy @Model.Title
     </h3>
     <br />
     <div class="row">
-        <div class="col-sm-4">
-            <img src="@Model.ImgUrl" class="img-responsive" />
+        <div class="col-sm-4 text-center">
+            <img src="@Model.ImgUrl" class="img-responsive img-rounded" />
         </div>
         <br />
-        <div class="col-sm-6">
-            For @Model.TotalPrice BGN (Price with tax 20%)
+        <div class="col-sm-4 text-center">
+            Buy for <strong>@Model.TotalPrice BGN</strong> 
+            <p>(with tax 20%)</p>
         </div>
-        <div class="col-sm-2">
-            @*<input type="submit" class="btn btn-sucsess " />*@
-        </div>
+
+        @using (Html.BeginForm("Cart", "Ads", FormMethod.Post))
+        { 
+            @Html.HiddenFor(a => a.AdId)
+            @Html.HiddenFor(a => a.TotalPrice)
+
+            <div class="col-sm-4 text-center" style="margin-top: 20px">
+                <input type="submit" value="Buy now!" class="btn btn-primary " />
+                <a href="/Ads/Details/@Model.AdId" class="btn btn-default">Cancel</a>
+            </div>
+        }
+
+        
     </div>
 </div>
 

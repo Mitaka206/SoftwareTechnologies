@@ -189,11 +189,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Admin\UserController.cs" />
     <Compile Include="Controllers\AdsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Data\Ad.cs" />
-    <Compile Include="Data\Archive.cs" />
+    <Compile Include="Data\Cart.cs" />
     <Compile Include="Data\Category.cs" />
     <Compile Include="Data\Town.cs" />
     <Compile Include="Global.asax.cs">
@@ -204,31 +205,29 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Data\SellPlaceDbContext.cs" />
     <Compile Include="Data\ApplicationUser.cs" />
+    <Compile Include="Models\Admins\Role.cs" />
+    <Compile Include="Models\Admins\UserViewModel.cs" />
     <Compile Include="Models\Ads\CategoryAdModel.cs" />
     <Compile Include="Models\Ads\CreateAdModel.cs" />
     <Compile Include="Models\Ads\DetailsAdModel.cs" />
     <Compile Include="Models\Ads\AllAdModel.cs" />
     <Compile Include="Models\Ads\EditAdModel.cs" />
-    <Compile Include="Models\CartModel.cs" />
+    <Compile Include="Models\Ads\CartModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Pics\background.jpg" />
-    <Content Include="Pics\img1.jpg" />
-    <Content Include="Pics\img2.jpg" />
-    <Content Include="Pics\img3.jpg" />
-    <Content Include="Pics\img4.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="applicationhost.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -278,10 +277,15 @@
     <Content Include="Views\Ads\Delete.cshtml" />
     <Content Include="Views\Ads\Edit.cshtml" />
     <Content Include="Views\Ads\Cart.cshtml" />
+    <Content Include="Views\Shared\_CreateCommentPartial.cshtml" />
+    <Content Include="Views\User\List.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="code\" />
+    <Folder Include="Content\Pics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -312,7 +316,16 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49563</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49563/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

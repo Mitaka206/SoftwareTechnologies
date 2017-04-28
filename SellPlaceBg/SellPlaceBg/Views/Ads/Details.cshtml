@@ -1,35 +1,32 @@
 ﻿@model SellPlaceBg.Models.Ads.DetailsAdModel
+
 @{
     ViewBag.Title = "Details";
 }
 
-@if (Model.IsSold)
-{
-    <h2 class="text-center text-warning">
-         This product is Sold!!!
-    </h2>
-}
 
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            <img src="@Model.ImgUrl" class="img-responsive" />
-            <div class="text-center detail-price">
+        <div class="col-sm-4" style="margin-top: 30px">
+            <img src="@Model.ImgUrl" class="img-responsive img-rounded @(Model.IsSold ? "style=opacity:0.5" : string.Empty)" />
+
+            <div class="detail-price">
                 @Model.Price BGN
             </div>
-            <div class="col-sm-4">
+
+            <div class="col-sm-4 detail-btn">
                 @if (Model.ContactInformation != User.Identity.Name)
                 {
                     using (Html.BeginForm("Cart", "Ads", FormMethod.Get))
                     {
                         @Html.Hidden("AdId", Model.Id)
-                        <input class="btn btn-success @(Model.IsSold ? "disabled" : string.Empty)" type="submit" value="Add to cart" />
+                        @Html.Hidden("SellerId", Model.SellerId)
+                        <input class="btn btn-success text-center @(Model.IsSold ? "disabled" : string.Empty)" type="submit" value="Add to cart" />
                     }
                 }
-
             </div>
 
         </div>
@@ -37,12 +34,14 @@
         <div class="col-sm-6">
             <h2>@Model.Title
             in @Model.Town</h2>
-            <div class="info-ad" style="text-align: right">
+            <div class="text-center info-ad">
                 <h6>
                     Category:
                     <i>
-                        @Model.Category
-                    | </i>
+                        <strong>
+                            <a href="#" title="categoty">@Model.Category</a>
+                        </strong>
+                    </i> |
                     Added on: 
                     <i>
                         @Model.Date.Day
@@ -52,14 +51,27 @@
                 </h6>
             </div>
             <hr />
-            <div class="discription bt">
-                @Html.Raw(@Model.Discription)
+            <div class="discription" style="text-align: justify">
+                @if (Model.IsSold)
+                {
+                    <h2 class="text-center text-danger">
+                        This product is Sold!!!
+                    </h2>
+                }
+                else
+                {
+                    @Html.Raw(@Model.Discription)
+                }
             </div >
             
         </div>
         <div class="col-sm-2">
-            @Html.ActionLink("Edit", "Edit", "Ads", new { @id = Model.Id }, new { @class = "btn btn-default btn-sm pull-right", @style = "margin: 5px" })
-            @Html.ActionLink("Delete", "Delete", "Ads", new { @id = Model.Id }, new { @class = "btn btn-danger btn-sm pull-right", @style = "margin: 5px" })
+            @if (Model.ContactInformation == User.Identity.Name || User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", "Ads", new { @id = Model.Id }, new { @class = "btn btn-default btn-sm pull-right", @style = "margin: 5px" })
+                @Html.ActionLink("Delete", "Delete", "Ads", new { @id = Model.Id }, new { @class = "btn btn-danger btn-sm pull-right", @style = "margin: 5px" })
+            }
+           
         </div>
     </div>
     <hr />
@@ -71,10 +83,17 @@
         </div>
         <div class="col-sm-4">
             Contact:
-            <a href = "mailto:@Model.ContactInformation" > @Model.ContactInformation </a >
+            @if (Model.Seller != User)
+            {
+                <a href="mailto:@Model.ContactInformation"> @Model.ContactInformation </a>
+            }
+            
         </div>
         <div class="col-sm-4">
             @Html.ActionLink("Go to homepage", "Index", "Home")
         </div>
     </div>
+    <hr />
+    @*@Html.Partial("_CreateCommentPartial")*@
+
 </div>

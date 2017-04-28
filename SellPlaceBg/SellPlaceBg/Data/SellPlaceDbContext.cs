@@ -1,9 +1,5 @@
 ﻿using System.Data.Entity;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using SellPlaceBg.Models.Ads;
 
 namespace SellPlaceBg.Data
 {
@@ -16,9 +12,8 @@ namespace SellPlaceBg.Data
 
         public virtual IDbSet<Ad> Ads { get; set; }
 
-        public virtual IDbSet<Archive> Archives { get; set; }
+        public virtual IDbSet<Cart> Carts { get; set; }
         
-
         public static SellPlaceDbContext Create()
         {
             return new SellPlaceDbContext();

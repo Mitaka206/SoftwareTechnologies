@@ -1,26 +1,22 @@
 ﻿using SellPlaceBg.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace SellPlaceBg.Models.Ads
 {
     public class DetailsAdModel
     {
         public int Id { get; set; }
-        
+
         public string Title { get; set; }
-        
+
         public Category Category { get; set; }
-        
+
         public string Discription { get; set; }
-        
+
         public decimal Price { get; set; }
-        
+
         public Town Town { get; set; }
-        
+
         public string ImgUrl { get; set; }
 
         public bool IsSold { get; set; }
@@ -33,9 +29,7 @@ namespace SellPlaceBg.Models.Ads
 
         public string ContactInformation { get; set; }
 
-        public bool IsSeller(string sellerId)
-        {
-            return this.SellerId == sellerId;
-        }
+        public bool IsSeller { get; set; }
+
     }
 }

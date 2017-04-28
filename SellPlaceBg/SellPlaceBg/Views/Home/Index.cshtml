@@ -4,50 +4,59 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron" style="margin-top: 20px">
-    <h2 class="text-center">
-        Sell place BG
-    </h2>
-</div>
-
 
 <div class="container">
     <div class="row">
+        <div class="jumbotron">
+            <div class="row">
+                <div>
+                @using (Html.BeginForm("AllAds", "Ads", FormMethod.Get))
+                    {
+                    <div class="col-sm-6" style="margin-top: 50px">
+                        <input type="text" class="form-control" name="Search" style="display: inline-block; margin-right: 10px" value="@Request.QueryString["search"]" />
+                        <input type="submit" class="btn btn-primary" value="Search" />
+                    </div>
+                     }
+                </div>
+                    <div class="col-sm-6">
+                        <h1>The best free selling platform</h1>
+                    </div>
+                    <p style="margin-right: 10px">In this place you can upload an unlimited number of products in a different categoryes and they can be seen by millions of people around the world.</p>
+            </div>
+        </div>
 
         @foreach (var item in Model)
         {
-            <div class="col-sm-4">
+            <div class="col-sm-4" style="margin-bottom: 20px">
                 <h2>
                     <a href="~/Ads/Details/@item.Id">
                         @item.Title
                     </a>
                 </h2>
-                <div class="info-ad" style="text-align: right">
-                    <h6>
-                        Category:
-                        <i>
-                            <strong>
-                                @item.Category
-                            </strong>
-                        </i>
-                    </h6>
-                </div>
+                <div class="text-center info-ad">
+                <h6>
+                    Category:
+                    <i>
+                        <strong>
+                            <a href="#" title="categoty">@item.Category</a>
+                        </strong>
+                    </i>
+                </h6>
+            </div>
                 <div>
                     @item.Price BGN
                 </div>
                 <div>
                     <a href="~/Ads/Details/@item.Id">
-                        <img src="@item.ImgUrl" class="img-responsive" style="height: 150px" />
+                        <img src="@item.ImgUrl" class="img-responsive img-rounded center-block" style="height: 150px" />
                     </a>
-                    <p>
-                        <br />
-                        <a class="btn btn-info" href="~/Ads/Details/@item.Id">See more</a>
-                    </p>
+                    
                 </div>
+                <br />
                 <hr />
             </div>
 
-        }
+            }
     </div>
 
 </div>

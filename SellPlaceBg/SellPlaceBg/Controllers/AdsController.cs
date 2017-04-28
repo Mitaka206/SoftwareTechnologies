@@ -7,18 +7,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Net;
 
 namespace SellPlaceBg.Controllers
 {
     public class AdsController : Controller
     {
-        public ActionResult AllAds(int page = 1, string user = null)
+        public ActionResult AllAds(
+            int page = 1,
+            string user = null,
+            string search = null,
+            string category = null
+            )
         {
             var db = new SellPlaceDbContext();
 
             var pageSize = 3;
 
             var adsQuery = db.Ads.AsQueryable();
+
+            if (search != null)
+            {
+                adsQuery = adsQuery
+                    .Where(a => a.Title.ToLower().Contains(search.ToLower()) 
+                    || a.Discription.Contains(search.ToLower()) 
+                    || a.Category.ToString().Contains(search.ToLower()));
+            }
+
+            if (category != null)
+            {
+                adsQuery = adsQuery
+                    .Where(a => a.Title.ToLower().Contains(category.ToLower())
+                    || a.Discription.Contains(category.ToLower())
+                    || a.Category.ToString().Contains(category.ToLower()));
+            }
 
             if (user != null)
             {
@@ -27,6 +49,7 @@ namespace SellPlaceBg.Controllers
             }
 
             var ads = adsQuery
+                //.Where(a => !a.IsSold)
                 .OrderByDescending(a => a.Date)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -37,7 +60,7 @@ namespace SellPlaceBg.Controllers
                     Category = a.Category,
                     Discription = a.Discription,
                     Price = a.Price,
-                    ImgUrl = a.ImgUrl,
+                    ImgUrl = a.ImgURL,
                     IsSold = a.IsSold
                 })
             .ToList();
@@ -46,28 +69,7 @@ namespace SellPlaceBg.Controllers
 
             return View(ads);
         }
-
-        //public ActionResult FromCategory(Ad ad, int page = 1, Category category = null)
-        //{
-        //    var db = new SellPlaceDbContext();
-
-        //    var pageSize = 3;
-            
-        //    var ads = db.Ads
-        //        .OrderByDescending(a => a.Date)
-        //        .Skip((page - 1) * pageSize)
-        //        .Take(pageSize)
-        //        .Select(a => new CategoryAdModel
-        //        {
-        //            Ad = a.Category
-        //        })
-        //    .ToList();
-
-        //    ViewBag.CurrentPage = page;
-
-        //    return View(ads);
-        //}
-
+        
         [Authorize]
         [HttpGet]
         public ActionResult Create()
@@ -77,11 +79,14 @@ namespace SellPlaceBg.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CreateAdModel model)
         {
             if (this.ModelState.IsValid)
             {
-                var sellerId = this.User.Identity.GetUserId();
+                var sellerId = this.User
+                    .Identity
+                    .GetUserId();
 
                 var ad = new Ad
                 {
@@ -90,7 +95,7 @@ namespace SellPlaceBg.Controllers
                     Discription = model.Discription,
                     Price = model.Price,
                     Town = model.Town,
-                    ImgUrl = model.ImgUrl,
+                    ImgURL = model.ImgUrl,
                     SellerId = sellerId,
                     Date = DateTime.Now
                 };
@@ -116,15 +121,16 @@ namespace SellPlaceBg.Controllers
                 .Select(a => new DetailsAdModel
                 {
                     Id = a.Id,
+                    SellerId = a.SellerId,
                     Title = a.Title,
                     Category = a.Category,
                     Discription = a.Discription,
                     Town = a.Town,
                     Date = a.Date,
                     Price = a.Price,
-                    ImgUrl = a.ImgUrl,
+                    ImgUrl = a.ImgURL,
                     IsSold = a.IsSold,
-                    ContactInformation = a.Seller.Email
+                    ContactInformation = a.Seller.UserName
 
                 })
                 .FirstOrDefault();
@@ -161,6 +167,7 @@ namespace SellPlaceBg.Controllers
         [Authorize]
         [ActionName("Delete")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ConfirmDelete(int id)
         {
             using (var db = new SellPlaceDbContext())
@@ -201,7 +208,7 @@ namespace SellPlaceBg.Controllers
                     Category = ad.Category,
                     Discription = ad.Discription,
                     Price = ad.Price,
-                    ImgUrl = ad.ImgUrl,
+                    ImgUrl = ad.ImgURL,
                     SellerId = ad.SellerId,
                 };
                 return View(editAdModel);
@@ -211,6 +218,7 @@ namespace SellPlaceBg.Controllers
         [Authorize]
         [ActionName("Edit")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(EditAdModel model)
         {
             if (ModelState.IsValid)
@@ -228,8 +236,8 @@ namespace SellPlaceBg.Controllers
                     ad.Category = model.Category;
                     ad.Discription = model.Discription;
                     ad.Price = model.Price;
-                    ad.ImgUrl = model.ImgUrl;
-
+                    ad.ImgURL = model.ImgUrl;
+                    
                     db.SaveChanges();
                 }
 
@@ -251,7 +259,7 @@ namespace SellPlaceBg.Controllers
                 {
                     a.IsSold,
                     a.Title,
-                    a.ImgUrl,
+                    a.ImgURL,
                     a.Price
                 })
                 .FirstOrDefault();
@@ -262,13 +270,46 @@ namespace SellPlaceBg.Controllers
             }
 
             cartModel.Title = ad.Title;
-            cartModel.ImgUrl = ad.ImgUrl;
+            cartModel.ImgUrl = ad.ImgURL;
             cartModel.Price = ad.Price;
             cartModel.TotalPrice = ad.Price * (decimal)(1.2);
 
             return View(cartModel);
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult Cart(int adId, decimal totalPrice)
+        {
+            var db = new SellPlaceDbContext();
+
+            var ad = db.Ads
+                .Where(a => a.Id == adId)
+                .FirstOrDefault();
+
+            var userId = this.User.Identity.GetUserId();
+
+            if (ad == null || ad.IsSold || ad.SellerId == userId)
+            {
+                return HttpNotFound();
+            }
+
+            var cart = new Cart
+            {
+                AdId = adId,
+                TotalPrice = totalPrice,
+                UserId = userId,
+                BuyOn = DateTime.Now
+            };
+
+            ad.IsSold = true;
+
+            db.Carts.Add(cart);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = ad.Id });
+        }
+        
         private bool IsAutorized(Ad ad)
         {
             var isAdmin = this.User.IsInRole("Admin");
