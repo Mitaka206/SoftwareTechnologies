@@ -24,6 +24,6 @@ namespace myMag.Models
             return new ApplicationDbContext();
         }
 
-        
+        public System.Data.Entity.DbSet<myMag.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

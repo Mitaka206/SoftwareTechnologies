@@ -1,0 +1,46 @@
+﻿@using myBlog.Classes;
+
+@model IEnumerable<myBlog.Models.Article>
+    
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@foreach (var item in Model.OrderByDescending(a => a.Date)
+                .ThenBy(a => a.Date.Hour).ToList())
+{
+    <div class="col-md-10">
+        <article>
+            <h2 class="title">
+                @Html.ActionLink(@item.Title, "Details", new { id = item.Id })
+            </h2>
+            <div class="about">
+                @if (item.Author != null)
+                {
+                    @item.Author.FullName
+                }
+                else
+                {
+                    @:<i>(no Author) </i>
+                }
+                | @Html.DisplayFor(modelItem => item.Date)
+            </div>
+            <div class="content">
+                @Html.Raw(Utils.CutText(item.Content))
+            </div>
+
+            <footer>
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+            </footer>
+        </article>
+        <hr>
+    </div>
+}
+

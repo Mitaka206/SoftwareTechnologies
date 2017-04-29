@@ -10,7 +10,7 @@ namespace myMag.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("List", "Ad");
+            return RedirectToAction("Index", "Ads");
         }
 
         public ActionResult About()

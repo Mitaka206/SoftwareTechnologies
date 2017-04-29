@@ -1,0 +1,46 @@
+﻿@model List<MedicalBlog.Models.Article>
+
+@using MedicalBlog.Classes;
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <div class="row">
+        @foreach (var article in Model.OrderByDescending(a => a.Date)
+                .ThenBy(a => a.Date.Hour)
+                .Take(6))
+        {
+            <div class="col-sm-6">
+                <article class="well-searchbox-back">
+                    <header>
+                        <h2>
+                            @Html.ActionLink(@article.Title, "Details", "Article", new { @id = article.Id }, null)
+                        </h2>
+                        <div class="theme">
+                            &emsp;@article.Theme
+                        </div>
+                        
+                        <div class="about pull-right">
+                            @if (article.Author != null)
+                            {
+                                @:Author: 
+                                @article.Author.FullName
+                            }
+                            else
+                            {
+                                @:<i>(no Author) </i>
+                            }
+                            | @Html.DisplayFor(modelItem => article.Date)
+                        </div>
+                    </header>
+                    <br />
+                    <div class="content">
+                        &emsp;
+                        @Html.Raw(Utils.CutText(article.Content))
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+</div>

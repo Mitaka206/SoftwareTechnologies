@@ -1,0 +1,40 @@
+﻿@model myBlog.Models.Article
+
+@using myBlog.Classes;
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Article</h4>
+    <hr />
+    <article>
+        <div class="content">
+            @Html.Raw(Model.Content)
+        </div>
+        <footer class="about">
+            @if (Model.Author != null)
+            {
+                @Model.Author.FullName
+            }
+            else
+            {
+                @:<i>(no Author) </i>
+                }
+            | @Model.Date
+        </footer>
+    </article>
+</div>
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) @:|
+    }
+    
+    @Html.ActionLink("Back to List", "Index")
+</p>
+

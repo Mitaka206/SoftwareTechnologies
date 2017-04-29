@@ -17,44 +17,116 @@ namespace myMag.Controllers
         // GET: Ads
         public ActionResult Index()
         {
-            return View();
+            var ads = db.Ads.Include(a => a.Seller);
+            return View(ads.ToList());
         }
 
-        public ActionResult List()
-        {
-            using(var database = new ApplicationDbContext())
-            {
-                var ads = database.Ads.Include(ad => ad.Seller).ToList();
-                return View(ads);
-            }
-            
-        }
-
+        // GET: Ads/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            using (var database = new ApplicationDbContext())
+            Ad ad = db.Ads.Find(id);
+            if (ad == null)
             {
-                var ad = database.Ads
-                    .Where(a => a.Id == id)
-                    .Include(a => a.Seller).First();
-                
-                if (ad == null)
-                {
-                    return HttpNotFound();
-                }
-                
-
-
-                return View(ad);
+                return HttpNotFound();
             }
+            return View(ad);
         }
 
+        // GET: Ads/Create
+        public ActionResult Create()
+        {
+            ViewBag.AuthorID = new SelectList(db.ApplicationUsers, "Id", "FullName");
+            return View();
+        }
 
+        // POST: Ads/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,TitleAd,CategotyAd,DescriptionAd,PhoneContact,AuthorID")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Ads.Add(ad);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
+            ViewBag.AuthorID = new SelectList(db.ApplicationUsers, "Id", "FullName", ad.AuthorID);
+            return View(ad);
+        }
+
+        // GET: Ads/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ad ad = db.Ads.Find(id);
+            if (ad == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.AuthorID = new SelectList(db.ApplicationUsers, "Id", "FullName", ad.AuthorID);
+            return View(ad);
+        }
+
+        // POST: Ads/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,TitleAd,CategotyAd,DescriptionAd,PhoneContact,AuthorID")] Ad ad)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(ad).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.AuthorID = new SelectList(db.ApplicationUsers, "Id", "FullName", ad.AuthorID);
+            return View(ad);
+        }
+
+        // GET: Ads/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ad ad = db.Ads.Find(id);
+            if (ad == null)
+            {
+                return HttpNotFound();
+            }
+            return View(ad);
+        }
+
+        // POST: Ads/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Ad ad = db.Ads.Find(id);
+            db.Ads.Remove(ad);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
